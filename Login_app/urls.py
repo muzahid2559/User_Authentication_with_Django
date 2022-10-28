@@ -1,5 +1,8 @@
 from django.urls import path
-from CRUD import views
+from Login_app import views
+
+app_name = 'Login_app'
+
 
 urlpatterns = [
 
