@@ -28,12 +28,19 @@ def user_login(request):
         else:
             return HttpResponse("Login Details are Wrong!")
     else:
-        return render(request, 'Login_app/login.html', context={})
+        return HttpResponseRedirect(reverse('Login_app:login'))
+
+
+@login_required
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('Login_app:index'))
 
 
 def index(request):
     diction = {}
     return render(request, 'Login_app/index.html', context=diction)
+
 
 def register(request):
     registered = False
