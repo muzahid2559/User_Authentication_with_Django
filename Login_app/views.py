@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from Login_app.forms import UserForm, UserInfoForm
+from Login_app.models import UserInfo
+from django.contrib.auth.models import User
 
 
 from django.contrib.auth import authenticate, login, logout
@@ -38,8 +40,14 @@ def user_logout(request):
 
 
 def index(request):
-    diction = {}
-    return render(request, 'Login_app/index.html', context=diction)
+    dict={}
+    if request.user.is_authenticated:
+        current_user = request.user
+        user_id = current_user.id
+        user_basic_info = User.objects.get(pk=user_id)
+        user_more_info = UserInfo.objects.get(user__pk=user_id)
+        dict = {'user_basic_info':user_basic_info, 'user_more_info':user_more_info}
+    return render(request, 'Login_app/index.html', context=dict)
 
 
 def register(request):
