@@ -2,7 +2,35 @@ from django.shortcuts import render
 from Login_app.forms import UserForm, UserInfoForm
 
 
+from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+
 # Create your views here.
+
+def login_page(request):
+    return render(request, 'Login_app/login.html', context={})
+
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(username=username, password=password)
+        if user:
+            if user.is_active:
+                login(request, user)
+                print("Login Successful!")
+                return HttpResponseRedirect(reverse('Login_app:index'))
+            else:
+                return HttpResponse("Account is not active!!")
+        else:
+            return HttpResponse("Login Details are Wrong!")
+    else:
+        return render(request, 'Login_app/login.html', context={})
+
+
 def index(request):
     diction = {}
     return render(request, 'Login_app/index.html', context=diction)
